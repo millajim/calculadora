@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Calculadora Elegante</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f0f4f8;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+            .calculator {
+                background-color: #ffffff;
+                border-radius: 15px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+                width: 300px;
+            }
+            #display {
+                width: 100%;
+                height: 50px;
+                font-size: 32px;
+                text-align: right;
+                border: none;
+                border-radius: 10px;
+                padding: 10px;
+                margin-bottom: 15px;
+                background-color: #eaeaea;
+            }
+            .button {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+                margin: 5px;
+                cursor: pointer;
+                border-radius: 10px;
+                border: none;
+                background-color: #007bff; /* Color de fondo */
+                color: white; /* Color del texto */
+                transition: background-color 0.3s, transform 0.1s; /* Animación */
+            }
+            .button:hover {
+                background-color: #0056b3; /* Color al pasar el mouse */
+            }
+            .button:active {
+                transform: scale(0.95); /* Efecto de pulsar */
+            }
+            .result {
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="calculator">
+            <input type="text" id="display" placeholder="0" disabled>
+            <br>
+            <div>
+                <button class="button" onclick="appendNumber(7)">7</button>
+                <button class="button" onclick="appendNumber(8)">8</button>
+                <button class="button" onclick="appendNumber(9)">9</button>
+                <button class="button" onclick="setOperation('/')">/</button>
+            </div>
+            <div>
+                <button class="button" onclick="appendNumber(4)">4</button>
+                <button class="button" onclick="appendNumber(5)">5</button>
+                <button class="button" onclick="appendNumber(6)">6</button>
+                <button class="button" onclick="setOperation('*')">*</button>
+            </div>
+            <div>
+                <button class="button" onclick="appendNumber(1)">1</button>
+                <button class="button" onclick="appendNumber(2)">2</button>
+                <button class="button" onclick="appendNumber(3)">3</button>
+                <button class="button" onclick="setOperation('-')">-</button>
+            </div>
+            <div>
+                <button class="button" onclick="appendNumber(0)">0</button>
+                <button class="button" onclick="calculateResult()">=</button>
+                <button class="button" onclick="clearDisplay()">C</button>
+                <button class="button" onclick="setOperation('+')">+</button>
+            </div>
+        </div>
+
+        <script>
+            let currentInput = '';
+            let previousInput = '';
+            let operation = '';
+
+            function appendNumber(number) {
+                currentInput += number.toString();
+                updateDisplay();
+            }
+
+            function setOperation(op) {
+                if (currentInput === '')
+                    return; // No hacer nada si no hay entrada
+                if (previousInput !== '') {
+                    calculateResult(); // Calcular si ya hay una operación anterior
+                }
+                operation = op;
+                previousInput = currentInput;
+                currentInput = '';
+            }
+
+            function calculateResult() {
+                let result;
+
+                const prev = parseFloat(previousInput);
+                const current = parseFloat(currentInput);
+
+                if (isNaN(prev) || isNaN(current))
+                    return;
+
+                switch (operation) {
+                    case '+':
+                        result = prev + current;
+                        break;
+                    case '-':
+                        result = prev - current;
+                        break;
+                    case '*':
+                        result = prev * current;
+                        break;
+                    case '/':
+                        result = current === 0 ? 'Error' : prev / current; // Manejo de división por cero
+                        break;
+                    default:
+                        return; // No hacer nada si no hay operación
+                }
+
+                currentInput = result.toString();
+                operation = '';
+                previousInput = '';
+                updateDisplay();
+            }
+
+            function clearDisplay() {
+                currentInput = '';
+                previousInput = '';
+                operation = '';
+                updateDisplay();
+            }
+
+            function updateDisplay() {
+                document.getElementById('display').value = currentInput || '0';
+            }
+        </script>
+
+    </body>
+</html>
